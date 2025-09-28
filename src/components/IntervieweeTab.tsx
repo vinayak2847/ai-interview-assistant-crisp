@@ -11,7 +11,7 @@ const { Step } = Steps;
 
 const IntervieweeTab: React.FC = () => {
   const dispatch = useDispatch();
-  const { currentCandidate, isInterviewActive } = useSelector((state: RootState) => state.interview);
+  const { currentCandidate } = useSelector((state: RootState) => state.interview);
   const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {

@@ -1,4 +1,3 @@
-import { Candidate } from '../types';
 
 export const checkForUnfinishedSession = (): boolean => {
   const candidates = JSON.parse(localStorage.getItem('persist:root') || '{}');

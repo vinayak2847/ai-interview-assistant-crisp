@@ -14,7 +14,8 @@ export const parsePDF = async (file: File): Promise<ExtractedData> => {
     reader.onload = async (e) => {
       try {
         const arrayBuffer = e.target?.result as ArrayBuffer;
-        const data = await pdfParse(arrayBuffer);
+        // pdf-parse types expect Node Buffer; cast to any for browser usage
+        const data = await (pdfParse as any)(arrayBuffer as any);
         const extracted = extractFields(data.text);
         resolve({ ...extracted, text: data.text });
       } catch (error) {

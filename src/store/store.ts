@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import interviewReducer from './slices/interviewSlice';
@@ -10,10 +10,12 @@ const persistConfig = {
   whitelist: ['interview', 'ui']
 };
 
-const persistedReducer = persistReducer(persistConfig, {
+const rootReducer = combineReducers({
   interview: interviewReducer,
   ui: uiReducer,
 });
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
@@ -27,5 +29,5 @@ export const store = configureStore({
 
 export const persistor = persistStore(store);
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;

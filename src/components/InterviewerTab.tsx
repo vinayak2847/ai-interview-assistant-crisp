@@ -15,7 +15,7 @@ const InterviewerTab: React.FC = () => {
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
 
-  const filteredCandidates = candidates.filter(candidate =>
+  const filteredCandidates = candidates.filter((candidate: Candidate) =>
     candidate.name.toLowerCase().includes(searchText.toLowerCase()) ||
     candidate.email.toLowerCase().includes(searchText.toLowerCase())
   );

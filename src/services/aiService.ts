@@ -205,6 +205,9 @@ export class AIService {
       feedbacks.push("🚫 This answer is incorrect or off-topic. Please review the question and provide a relevant response.");
     }
     
+    // Difficulty context
+    feedbacks.push(`Difficulty: ${difficulty.toUpperCase()}.`);
+
     // Length feedback
     if (answer.length < 30) {
       feedbacks.push("📝 Your answer is too brief. Try to elaborate more on your points.");

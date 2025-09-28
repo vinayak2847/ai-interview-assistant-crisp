@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, Input, Button, Progress, message } from 'antd';
+import { Input, Button, Progress, message } from 'antd';
 import { SendOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store/store';
@@ -13,7 +13,7 @@ import {
 } from '../store/slices/interviewSlice';
 import { AIService } from '../services/aiService';
 import { formatTime } from '../utils/sessionUtils';
-import { Candidate, Question } from '../types';
+import { Candidate, Question, ChatMessage } from '../types';
 
 interface ChatInterfaceProps {
   candidate: Candidate;
@@ -126,7 +126,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ candidate, onComplete }) 
       }
 
       // Evaluate answer
-      const score = await aiService.evaluateAnswer(currentQuestion.text, answer, currentQuestion.difficulty);
+      const result = await aiService.evaluateAnswer(currentQuestion.text, answer, currentQuestion.difficulty);
       const timeSpent = currentQuestion.timeLimit - timeRemaining;
       
       // Add answer to candidate
@@ -135,7 +135,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ candidate, onComplete }) 
         question: currentQuestion.text,
         answer: answer || 'No answer provided',
         difficulty: currentQuestion.difficulty,
-        score: Math.round(score),
+        score: result.score,
         timeSpent,
         timestamp: new Date().toISOString(),
       };
@@ -146,7 +146,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ candidate, onComplete }) 
       dispatch(addChatMessage({
         id: `msg_${Date.now()}`,
         type: 'ai',
-        content: `Thank you for your answer. Score: ${Math.round(score)}/100`,
+        content: `Thank you for your answer. Score: ${result.score}/100`,
         timestamp: new Date().toISOString(),
       }));
 
@@ -222,7 +222,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ candidate, onComplete }) 
   return (
     <div className="chat-container">
       <div className="chat-messages">
-        {chatMessages.map((msg) => (
+        {chatMessages.map((msg: ChatMessage) => (
           <div
             key={msg.id}
             className={`message ${msg.type === 'user' ? 'user-message' : 'ai-message'}`}
